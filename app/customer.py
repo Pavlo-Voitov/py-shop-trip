@@ -2,25 +2,34 @@ import math
 import datetime
 from app.car import Car
 from app.shop import Shop
-from app.config_loader import load_config
+from typing import Dict, Tuple
+import json
 
-config = load_config()
+
+with open("app/config.json", "r") as file:
+    config = json.load(file)
+
 FUEL_PRICE = config["FUEL_PRICE"]
 
 
 class Customer:
-    def __init__(self, name: str, product_cart: int,
-                 location: int, money: int , car: Car) -> None:
+    def __init__(self, name: str, product_cart: Dict[str, int],
+                 location: Tuple[int, int],
+                 money: [int, float] , car: Car) -> None:
         self.name = name
         self.product_cart = product_cart
         self.location = tuple(location)
         self.money = money
-        self.car = Car(car["brand"], car["fuel_consumption"])
+        if isinstance(car, Car):
+            self.car = car
+        else:
+            self.car = Car(brand=car["brand"],
+                           fuel_consumption=car["fuel_consumption"])
 
     def distance_to(self, shop: Shop) -> int:
         return math.dist(self.location, shop.location)
 
-    def trip_cost(self, shop: Shop) -> [int, float]:
+    def trip_cost(self, shop: Tuple[int, int]) -> float:
         distance = self.distance_to(shop) * 2  # round trip
         fuel_needed = (distance / 100) * self.car.fuel_consumption
         return round(fuel_needed * FUEL_PRICE, 2)

@@ -1,12 +1,25 @@
-from app.config_loader import load_config
+import json
 from app.customer import Customer
 from app.shop import Shop
 
 
 def shop_trip() -> None:
-    config = load_config()
-    customers = [Customer(**c) for c in config["customers"]]
-    shops = [Shop(**s) for s in config["shops"]]
+    with open("app/config.json", "r") as file:
+        config = json.load(file)
+
+    customers = []
+    for cas in config["customers"]:
+        customers.append(Customer(
+            name=cas["name"],
+            product_cart=cas["product_cart"],
+            location=tuple(cas["location"]),
+            money=cas["money"],
+            car=cas["car"]
+        ))
+    shops = []
+    for sh in config["shops"]:
+        shops.append(Shop(name=sh["name"],
+                          location=sh["location"], products=sh["products"]))
 
     for customer in customers:
         print(f"{customer.name} has {customer.money} dollars")
