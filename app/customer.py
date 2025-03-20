@@ -52,15 +52,16 @@ class Customer:
         self.money -= (trip_cost + total_cost)
         self.location = shop.location
 
-        print(f"{self.name} rides to {shop.name}\n")
-        print(f"Date: {datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
-        print(f"Thanks, {self.name}, for your purchase!")
-        print("You have bought:")
-        for ps, qs in self.product_cart.items():
-            price = int(shop.products[ps] * qs) \
-                if str(shop.products[ps] * qs)[-1] == "0" \
-                else shop.products[ps] * qs
-            print(f"{qs} {ps}s for {price} dollars")
+        print(f"{self.name} rides to {shop.name}\n\n"
+              f"Date: "
+              f"{datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')}\n"
+              f"Thanks, {self.name}, for your purchase!\n"
+              "You have bought:")
+        for product, quantity in self.product_cart.items():
+            price = (int(shop.products[product] * quantity)
+                     if str(shop.products[product] * quantity)[-1] == "0"
+                     else shop.products[product] * quantity)
+            print(f"{quantity} {product}s for {price} dollars")
         print(f"Total cost is {total_cost} dollars\nSee you again!\n")
 
         print(f"{self.name} rides home")

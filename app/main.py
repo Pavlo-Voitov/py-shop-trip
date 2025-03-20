@@ -1,25 +1,11 @@
-import json
-from app.customer import Customer
+from app.customer import Customer, config
 from app.shop import Shop
 
 
 def shop_trip() -> None:
-    with open("app/config.json", "r") as file:
-        config = json.load(file)
 
-    customers = []
-    for cas in config["customers"]:
-        customers.append(Customer(
-            name=cas["name"],
-            product_cart=cas["product_cart"],
-            location=tuple(cas["location"]),
-            money=cas["money"],
-            car=cas["car"]
-        ))
-    shops = []
-    for sh in config["shops"]:
-        shops.append(Shop(name=sh["name"],
-                          location=sh["location"], products=sh["products"]))
+    customers = [Customer(**cas) for cas in config["customers"]]
+    shops = [Shop(**sh) for sh in config["shops"]]
 
     for customer in customers:
         print(f"{customer.name} has {customer.money} dollars")
@@ -28,8 +14,10 @@ def shop_trip() -> None:
 
         for shop in shops:
             trip_cost = customer.trip_cost(shop)
-            total_cost = sum(shop.products.get(p, float("inf")) * q
-                             for p, q in customer.product_cart.items())
+            total_cost = sum(shop.products.get(product,
+                                               float("inf")) * quantity
+                             for product, quantity in
+                             customer.product_cart.items())
             total_trip_cost = trip_cost + total_cost
 
             print(f"{customer.name}'s trip to the "
