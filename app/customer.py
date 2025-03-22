@@ -47,8 +47,8 @@ class Customer:
             return
 
         trip_cost = self.trip_cost(shop)
-        total_cost = sum(shop.products[p] * q
-                         for p, q in self.product_cart.items())
+        total_cost = sum(shop.products[product] * quantity
+                         for product, quantity in self.product_cart.items())
         self.money -= (trip_cost + total_cost)
         self.location = shop.location
 
