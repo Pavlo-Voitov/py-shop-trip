@@ -4,8 +4,8 @@ from app.shop import Shop
 
 def shop_trip() -> None:
 
-    customers = [Customer(**cas) for cas in config["customers"]]
-    shops = [Shop(**sh) for sh in config["shops"]]
+    customers = [Customer(**customer) for customer in config["customers"]]
+    shops = [Shop(**shop) for shop in config["shops"]]
 
     for customer in customers:
         print(f"{customer.name} has {customer.money} dollars")
