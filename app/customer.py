@@ -36,8 +36,8 @@ class Customer:
 
     def can_afford(self, shop: Shop) -> bool:
         trip_cost = self.trip_cost(shop)
-        total_product_cost = sum(shop.products.get(p, float("inf")) * q
-                                 for p, q in self.product_cart.items())
+        total_product_cost = sum(shop.products.get(product, float("inf")) * quantity
+                                 for product, quantity in self.product_cart.items())
         return trip_cost + total_product_cost <= self.money
 
     def buy_products(self, shop: Shop) -> None:
